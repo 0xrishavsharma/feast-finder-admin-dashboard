@@ -1,8 +1,8 @@
 :root {
-    --primary-color: #f65f42;
+  --primary-color: #f65f42;
 }
 
 #login-form-forgot {
-    padding-top: 8px;
-    font-size: 12px;
+  padding-top: 8px;
+  font-size: 12px;
 }

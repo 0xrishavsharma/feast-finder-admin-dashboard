@@ -7,16 +7,16 @@ import { ConfigProvider } from "antd";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: "#F65F42",
-                    colorLink: "#F65F42",
-                },
-            }}
-        >
-            <RouterProvider router={router} />
-        </ConfigProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: "#F65F42",
+          colorLink: "#F65F42",
+        },
+      }}
+    >
+      <RouterProvider router={router} />
+    </ConfigProvider>
+  </React.StrictMode>
 );
