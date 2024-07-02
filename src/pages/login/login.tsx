@@ -1,7 +1,33 @@
-import { Card, Input, Layout, Space, Form, Checkbox, Button, Flex } from "antd";
+import {
+  Card,
+  Input,
+  Layout,
+  Space,
+  Form,
+  Checkbox,
+  Button,
+  Flex,
+  Alert,
+} from "antd";
 import { LockFilled, UserOutlined, LockOutlined } from "@ant-design/icons";
 import Logo from "../../components/icons/logo";
+import { useMutation } from "@tanstack/react-query";
+import { Credentials } from "../../types";
+import { login } from "../../http/api";
+
+const loginUser = async (credentials: Credentials) => {
+  const { data } = await login(credentials);
+  return data;
+};
 const LoginPage = () => {
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: loginUser,
+    onSuccess: async () => {
+      console.log("Login Successful");
+    },
+  });
+
   return (
     <>
       <Layout
@@ -44,9 +70,16 @@ const LoginPage = () => {
                 remember: true,
               }}
               onFinish={(values) => {
-                console.log("Values", values);
+                mutate({ email: values.username, password: values.password }),
+                  console.log("Values", values);
               }}
             >
+              {isError && <Alert type="error" message={error.message} />}
+              {/* // we have to be careful while displaying errors on the client
+              because sometimes server sends internal errors for example related
+              to db with columns in question, we have to handle these types of
+              error on the server so that those don't get passed down to the
+              client */}
               <Form.Item
                 name="username"
                 rules={[
@@ -81,7 +114,6 @@ const LoginPage = () => {
                   placeholder="Password"
                 />
               </Form.Item>
-
               <Flex style={{ justifyContent: "space-between" }}>
                 <Form.Item name="remember" valuePropName="checked">
                   <Checkbox>Remember me</Checkbox>
@@ -93,6 +125,8 @@ const LoginPage = () => {
               <Form.Item>
                 <Button
                   type="primary"
+                  loading={isPending}
+                  disabled={isPending}
                   htmlType="submit"
                   style={{ width: "100%" }}
                 >
